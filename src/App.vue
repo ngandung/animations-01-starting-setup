@@ -7,25 +7,27 @@
     
     <!-- <Transition> is Vue default component to control animation -->
     <!-- Transition only habve one direct element -->
-     <transition>
+     <transition name="para">
       <p v-if="paraIsVisible">This is only sometimes visible...</p>
     </transition>
     <button @click="toggleParagraph">Toggle Paragraph</button>
   </div>
-  <base-modal @close="hideDialog" v-if="dialogIsVisible">
-    <p>This is a test dialog!</p>
-    <button @click="hideDialog">Close it!</button>
-  </base-modal>
+ 
+    <base-modal @close="hideDialog" :open="dialogIsVisible">
+      <p>This is a test dialog!</p>
+      <button @click="hideDialog">Close it!</button>
+    </base-modal>
   <div class="container">
     <button @click="showDialog">Show Dialog</button>
   </div>
 
-  <!-- <div class="container">
-      <Transition>
+
+  <div class="container">
+      <Transition name="showing">
         <p v-if="show">hello</p>
       </Transition>
       <button @click="show = !show">Toggle</button>
-  </div> -->
+  </div>
 </template>  
 
 <script>
@@ -104,7 +106,13 @@ button:active {
   animation: slide-fade 1s ease-out forwards;
 }
 
+.para-enter-active {
+  animation: slide-fade 0.3s ease-in;
+}
 
+.para-leave-active {
+  animation: slide-fade 0.3s ease-out;
+}
 
 @keyframes slide-fade {
   0% {
@@ -120,28 +128,32 @@ button:active {
   }
 }
 
-.v-enter-from {
+/* .v-enter-from {
   opacity: 0;
   transform: translateY(-30px);
-}
+} */
 
 .v-enter-active {
   transition: all 1s ease-in;
 }
 
-.v-enter-to {
+/* .v-enter-to {
   opacity: 1;
   transform: translateY(0px);
-}
+} */
 
 /* we will explain what these classes do next! */
-/* .v-enter-active,
-.v-leave-active {
+.showing-enter-active,
+.showing-leave-active {
   transition: opacity 0.5s ease;
 }
 
-.v-enter-from,
-.v-leave-to {
+.showing-enter-from,
+.showing-leave-to {
   opacity: 0;
-} */
+}
+
+
+
+
 </style>
