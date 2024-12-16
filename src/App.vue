@@ -7,7 +7,16 @@
     
     <!-- <Transition> is Vue default component to control animation -->
     <!-- Transition only habve one direct element -->
-     <transition name="para">
+    <!-- :css is used to tell Vue that this transition is not using CSS code -->
+     <transition 
+      :css="false"
+      @before-enter="onBeforeEnter" 
+      @enter="onEnter"
+      @before-leave="onBeforeLeave"
+      @leave="onLeave"
+      @enter-cancelled="onEnterCancelled"
+      @leave-cancelled="onLeaveCancelled"
+     >
       <p v-if="paraIsVisible">This is only sometimes visible...</p>
     </transition>
     <button @click="toggleParagraph">Toggle Paragraph</button>
@@ -38,6 +47,8 @@ export default {
       animatedBlock: false,
       paraIsVisible: false,
       show: false,
+      enterInterval: null,
+      leaveInterval: null,
      };
   },
   methods: {
@@ -53,6 +64,43 @@ export default {
     hideDialog() {
       this.dialogIsVisible = false;
     },
+    onEnterCancelled() {
+      clearInterval(this.enterInterval);
+    },
+    onLeaveCancelled() {
+      clearInterval(this.leaveInterval);
+    },
+    onBeforeEnter(el) {
+      console.log(this.onBeforeEnter);
+      el.style.opacity = 0;
+    }, 
+    onEnter(el, done) {
+      let round = 1;
+      this.enterInterval = setInterval(() => {
+        el.style.opacity = round * 0.01;
+        round++;
+
+        if (round >= 100) {
+          clearInterval(this.enterInterval);
+          done();
+        }
+      } , 20);
+    },
+    onBeforeLeave(el) {
+      el.style.opacity = 1;
+    },
+    onLeave(el, done) {
+      let round = 1;
+      this.leaveInterval = setInterval(() => {
+        el.style.opacity = 1 - round*0.01;
+        round++;
+
+        if(round > 100) {
+          clearInterval(this.leaveInterval);
+          done();
+        }
+      },20);
+    }
   },
 };
 </script>
@@ -106,6 +154,7 @@ button:active {
   animation: slide-fade 1s ease-out forwards;
 }
 
+/*
 .para-enter-active {
   animation: slide-fade 0.3s ease-in;
 }
@@ -127,6 +176,7 @@ button:active {
     transform: translateX(-150px) scale(1);
   }
 }
+*/
 
 /* .v-enter-from {
   opacity: 0;

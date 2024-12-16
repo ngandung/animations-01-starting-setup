@@ -1,6 +1,6 @@
 <template>
   <div v-if="open" class="backdrop" @click="$emit('close')"></div>
-  <transition name="modal">
+  <transition name="modal" >
     <dialog open v-if="open">
       <slot></slot>
     </dialog>
@@ -40,6 +40,7 @@ dialog {
   /* animation: modal 0.5s ease-out forwards; */
 }
 
+/*
 .modal-enter-active{
   animation: modal 0.5s ease-in;
 }
@@ -59,4 +60,6 @@ dialog {
     transform: translateY(0) scale(1);
   }
 }
+
+*/
 </style>
